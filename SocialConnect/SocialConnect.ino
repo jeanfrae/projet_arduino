@@ -128,6 +128,8 @@ int setupBlueToothConnection()
     
     //we have to set the baud rate to 9600, since the soft serial is not stable at 115200
     sendBlueToothCommand("AT+RENEW");//restore factory configurations
+    sendBlueToothCommand("AT+MODE1");//restore factory configurations    
+    sendBlueToothCommand("AT+MODE?");//restore factory configurations    
     sendBlueToothCommand("AT+BAUD2");//reset the module's baud rate
     sendBlueToothCommand("AT+AUTH0");//enable authentication
     sendBlueToothCommand("AT+RESET");//restart module to take effect
