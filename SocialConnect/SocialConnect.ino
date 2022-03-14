@@ -25,15 +25,14 @@ For more details about the product please check http://www.seeedstudio.com/depot
 /* Upload this sketch into Arduino Uno and press reset*/
 
 #include <SoftwareSerial.h>   //Software Serial Port
-#define RxD 3
-#define TxD 4
+#define RxD 2
+#define TxD 3
 
 #define MASTER 1    //change this macro to define the Bluetooth as Master or not 
 
 SoftwareSerial blueToothSerial(RxD,TxD);//the software serial port 
 
 char recv_str[100];
-char msg = ' ';
 
 void setup() 
 { 
@@ -63,8 +62,7 @@ void loop()
     //in master mode, the bluetooth send message periodically. 
     delay(400);
     Serial.println("send: hi");
-    msg = Serial.read();
-    blueToothSerial.print(msg);
+    blueToothSerial.print("hi");
     delay(100);
     //get any message to print
     if(recvMsg(1000) == 0)
@@ -130,10 +128,8 @@ int setupBlueToothConnection()
     
     //we have to set the baud rate to 9600, since the soft serial is not stable at 115200
     sendBlueToothCommand("AT+RENEW");//restore factory configurations
-    sendBlueToothCommand("AT+MODE1");//restore factory configurations    
-    sendBlueToothCommand("AT+MODE?");//restore factory configurations    
     sendBlueToothCommand("AT+BAUD2");//reset the module's baud rate
-    sendBlueToothCommand("AT+AUTH0");//enable authentication
+    sendBlueToothCommand("AT+AUTH1");//enable authentication
     sendBlueToothCommand("AT+RESET");//restart module to take effect
     blueToothSerial.begin(9600);//reset the Arduino's baud rate
     delay(3500);//wait for module restart
@@ -143,8 +139,8 @@ int setupBlueToothConnection()
     sendBlueToothCommand("AT+ADDB?");//get BLE MAC
     sendBlueToothCommand("AT+NAMEHM-13-EDR");//set EDR name
     sendBlueToothCommand("AT+NAMBHM-13-BLE");//set BLE name
-    //sendBlueToothCommand("AT+PINE123451");//set EDR password
-    //sendBlueToothCommand("AT+PINB123451");//set BLE password
+    sendBlueToothCommand("AT+PINE123451");//set EDR password
+    sendBlueToothCommand("AT+PINB123451");//set BLE password
     sendBlueToothCommand("AT+SCAN0");//set module visible
     sendBlueToothCommand("AT+NOTI1");//enable connect notifications
     //sendBlueToothCommand("AT+NOTP1");//enable address notifications
