@@ -25,14 +25,15 @@ For more details about the product please check http://www.seeedstudio.com/depot
 /* Upload this sketch into Arduino Uno and press reset*/
 
 #include <SoftwareSerial.h>   //Software Serial Port
-#define RxD 2
-#define TxD 3
+#define RxD 3
+#define TxD 4
 
-#define MASTER 0    //change this macro to define the Bluetooth as Master or not 
+#define MASTER 1    //change this macro to define the Bluetooth as Master or not 
 
 SoftwareSerial blueToothSerial(RxD,TxD);//the software serial port 
 
 char recv_str[100];
+char msg = ' ';
 
 void setup() 
 { 
@@ -62,7 +63,8 @@ void loop()
     //in master mode, the bluetooth send message periodically. 
     delay(400);
     Serial.println("send: hi");
-    blueToothSerial.print("hi");
+    msg = Serial.read();
+    blueToothSerial.print(msg);
     delay(100);
     //get any message to print
     if(recvMsg(1000) == 0)
@@ -156,7 +158,6 @@ int setupBlueToothConnection()
     delay(3500);//wait for module restart
     if(sendBlueToothCommand("AT") != 0) return -1;//detect if the module exists
     Serial.print("Setup complete\r\n\r\n");
-    sendBlueToothCommand("");
     return 0;
 }
 
